@@ -103,14 +103,18 @@ class Search extends React.Component {
         </span>
         {products.length === 0 ? <h2>Nenhum produto foi encontrado</h2>
           : products.map((p) => (
-            <ProductCard
-              key={ p.id }
-              title={ p.title }
-              price={ p.price }
-              thumbnail={ p.thumbnail }
-              onClick={ this.addCart }
-              id={ p.id }
-            />))}
+            <>
+              <ProductCard
+                key={ p.id }
+                title={ p.title }
+                price={ p.price }
+                thumbnail={ p.thumbnail }
+                onClick={ this.addCart }
+                id={ p.id }
+              />
+              { p.shipping.free_shipping && (
+                <p data-testid="free-shipping">Frete grátis</p>)}
+            </>))}
       </>
     );
   }
