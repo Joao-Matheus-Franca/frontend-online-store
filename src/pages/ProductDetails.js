@@ -9,6 +9,7 @@ class ProductDetails extends React.Component {
   state = {
     product: '',
     reviews: [],
+    cartItens: 0,
   };
 
   async componentDidMount() {
@@ -17,6 +18,11 @@ class ProductDetails extends React.Component {
     const { id } = params;
     const product = await getProductById(id);
     this.setState({ product });
+
+    const cartItens = JSON.parse(localStorage.getItem('cartItems'));
+    if (cartItens !== null) {
+      this.setState({ cartItens: cartItens.length });
+    }
 
     const reviews = JSON.parse(localStorage.getItem(id));
     if (reviews) {
@@ -30,16 +36,18 @@ class ProductDetails extends React.Component {
     if (lastCart === null) {
       const saved = product;
       const initial = [saved];
+      this.setState({ cartItens: initial.length });
       localStorage.setItem('cartItems', JSON.stringify(initial));
     } else {
       const saved = product;
       const items = [...lastCart, saved];
+      this.setState({ cartItens: items.length });
       localStorage.setItem('cartItems', JSON.stringify(items));
     }
   };
 
   render() {
-    const { product, reviews } = this.state;
+    const { product, reviews, cartItens } = this.state;
     return (
       <div>
         <h1 data-testid="product-detail-name">
@@ -69,6 +77,7 @@ class ProductDetails extends React.Component {
           >
             Carrinho
           </button>
+          <p data-testid="shopping-cart-size">{cartItens}</p>
         </Link>
         <Form id={ product.id } />
         {reviews.map((e, i) => (

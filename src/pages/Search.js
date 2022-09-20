@@ -15,6 +15,10 @@ class Search extends React.Component {
   async componentDidMount() {
     const categories = await getCategories();
     this.setState({ categories });
+    const cartItens = JSON.parse(localStorage.getItem('cartItems'));
+    if (cartItens !== null) {
+      this.setState({ btn: cartItens });
+    }
   }
 
   handleChange = (event) => {
@@ -52,11 +56,13 @@ class Search extends React.Component {
       const product = products.find((p) => p.title === id);
       const saved = product;
       const initial = [saved];
+      this.setState({ btn: initial });
       localStorage.setItem('cartItems', JSON.stringify(initial));
     } else {
       const product = products.find((p) => p.title === id);
       const saved = product;
       const items = [...lastCart, saved];
+      this.setState({ btn: items });
       localStorage.setItem('cartItems', JSON.stringify(items));
     }
   };
