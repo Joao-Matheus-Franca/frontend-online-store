@@ -33,10 +33,13 @@ class ShoppingCart extends React.Component {
     const { products } = this.state;
     const { target: { id } } = event;
     const handleProduct = products.find((p) => p.id === id);
-    const lastCart = JSON.parse(localStorage.getItem('cartItems'));
-    const items = [...lastCart, handleProduct];
-    localStorage.setItem('cartItems', JSON.stringify(items));
-    this.setState({ products: items });
+    const productQuantity = products.filter((p) => p.id === id).length;
+    if (productQuantity < handleProduct.available_quantity) {
+      const lastCart = JSON.parse(localStorage.getItem('cartItems'));
+      const items = [...lastCart, handleProduct];
+      localStorage.setItem('cartItems', JSON.stringify(items));
+      this.setState({ products: items });
+    }
   };
 
   subProduct = (event) => {
